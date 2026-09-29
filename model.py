@@ -278,3 +278,21 @@ def accumulate_gradients(grad_list):
     # TODO: average a list of equally-shaped gradient tensors and return the mean tensor
     return torch.stack(grad_list).mean(dim=0)
 
+# Step 26 - sft_train_step
+import torch
+
+def sft_train_step(model, batch, optimizer):
+    """Run one SFT forward/backward/step and return the loss as a float."""
+    # TODO: forward the batch, compute shifted cross-entropy loss, backprop, step optimizer
+    logits = model(**batch).logits
+    slog, slab = shift_logits_and_labels(logits, batch['labels'])
+
+    loss = cross_entropy_loss(slog, slab)
+
+    model.train()
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    return loss.item()
+
