@@ -161,3 +161,23 @@ def make_attention_mask(padded_ids, pad_id):
     # TODO: return a same-shape 0/1 mask with 1 where token != pad_id else 0
     return [[0 if pid==pad_id else 1 for pid in seq] for seq in padded_ids]
 
+# Step 17 - collate_lm_batch
+def collate_lm_batch(batch, pad_id):
+    # TODO: pad input_ids and labels, build attention mask, return dict of LongTensors
+    out = {}
+    for key in batch[0]:
+        out[key] = []
+
+    for b in batch:
+        for key in out:
+            out[key].append(b[key])
+
+    out['input_ids'] = pad_batch(out['input_ids'], pad_id)
+    out['labels'] = pad_batch(out['labels'], -100)
+    out['attention_mask'] = make_attention_mask(out['input_ids'], pad_id)
+
+    for key in out:
+        out[key] = torch.tensor(out[key], dtype=torch.long)
+
+    return out
+
