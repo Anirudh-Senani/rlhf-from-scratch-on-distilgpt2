@@ -313,3 +313,8 @@ def evaluate_loss(model, batches):
 
     return torch.tensor(losses).mean().item()
 
+# Step 28 - lora_delta
+def lora_delta(A, B, alpha, r):
+    # TODO: build the scaled low-rank weight update from factors A and B.
+    return alpha/r * (B @ A)
+
