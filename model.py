@@ -214,3 +214,13 @@ def shift_logits_and_labels(logits, labels):
     # TODO: drop the last logit position and the first label position so token t predicts t+1
     return logits[:,:-1], labels[:,1:]
 
+# Step 21 - cross_entropy_loss
+import torch
+import torch.nn.functional as F
+
+def cross_entropy_loss(shift_logits, shift_labels):
+    """Mean next-token cross-entropy, ignoring label positions equal to -100."""
+    # TODO: reduce (B, T-1, V) logits and (B, T-1) labels to a scalar loss tensor.
+    B, T, V = shift_logits.shape
+    return F.cross_entropy(shift_logits.view((B*T, V)), shift_labels.view((B*T,)), ignore_index=-100)
+
