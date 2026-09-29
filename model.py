@@ -31,3 +31,17 @@ def set_pad_token_to_eos(tokenizer):
     tokenizer.pad_token = tokenizer.eos_token
     return tokenizer
 
+# Step 4 - generate_and_decode
+import torch
+
+
+def generate_and_decode(model, tokenizer, prompt, max_new_tokens=8):
+    # TODO: tokenize prompt, generate continuation greedily, decode and return as a string
+    prompt_ids = tokenizer.encode([prompt], return_tensors='pt')
+
+    for _ in range(max_new_tokens):
+        token = torch.argmax(model.generate(prompt_ids), dim=-1, keepdim=True)
+        prompt_ids = torch.cat([prompt_ids, token], dim=-1)
+
+    return tokenizer.decode(prompt_ids[0])
+
