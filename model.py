@@ -148,3 +148,11 @@ def mask_prompt_labels(labels, prompt_length):
 
     return [-100 if i < prompt_length else labels[i] for i in range(n)]
 
+# Step 15 - pad_batch
+def pad_batch(sequences, pad_id):
+    # TODO: right-pad a list of token id sequences to the longest length using pad_id
+    lens = [len(seq) for seq in sequences]
+    max_len = max(lens)
+
+    return [sequences[i]+[pad_id]*(max_len-lens[i]) for i in range(len(lens))]
+
