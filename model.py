@@ -195,3 +195,17 @@ def iterate_minibatches(examples, batch_size, seed=0):
     for i in range(0, n, batch_size):
         yield shuffled[i:i+batch_size]
 
+# Step 19 - train_val_split
+def train_val_split(examples, val_ratio=0.2, seed=0):
+    # TODO: deterministically split examples into (train, val) using seed and val_ratio
+    n = len(examples)
+    nval = int(n*val_ratio)
+    if nval == 0:
+        nval = -1
+
+    rng = random.Random(seed)
+    shuffled = [ex for ex in examples]
+    rng.shuffle(shuffled)
+
+    return shuffled[:-nval], shuffled[-nval:]
+
