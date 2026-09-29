@@ -209,3 +209,8 @@ def train_val_split(examples, val_ratio=0.2, seed=0):
 
     return shuffled[:-nval], shuffled[-nval:]
 
+# Step 20 - shift_logits_and_labels
+def shift_logits_and_labels(logits, labels):
+    # TODO: drop the last logit position and the first label position so token t predicts t+1
+    return logits[:,:-1], labels[:,1:]
+
