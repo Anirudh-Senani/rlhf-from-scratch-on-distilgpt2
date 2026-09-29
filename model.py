@@ -140,3 +140,11 @@ def build_labels(input_ids):
     # TODO: return a fresh list equal to input_ids to serve as next-token labels
     return [x for x in input_ids]
 
+# Step 14 - mask_prompt_labels
+def mask_prompt_labels(labels, prompt_length):
+    # TODO: replace the first prompt_length entries of labels with -100 and return the new list
+    n = len(labels)
+    prompt_length = min(prompt_length, n)
+
+    return [-100 if i < prompt_length else labels[i] for i in range(n)]
+
