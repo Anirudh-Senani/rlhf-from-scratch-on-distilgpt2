@@ -83,3 +83,40 @@ def top_p_filter(logits, p):
 
     return top_p
 
+# Step 9 - build_synthetic_instruction_dataset
+def build_synthetic_instruction_dataset():
+    # TODO: return a small in-memory list of {'prompt', 'response'} dicts for SFT
+    dataset = [{"prompt":"", "response":""} for _ in range(10)]
+
+    dataset[0]["prompt"] = "How would you fix overfitting on a real model quickly?"
+    dataset[0]["response"] = "Early stopping, dropout, regularization, decreasing the complexity of the model (reducing layers or neurons in layers), and adding additional data with more variety."
+
+    dataset[1]["prompt"] = "How does learning rate affect convergence/stability; how do you tune it?"
+    dataset[1]["response"] = "A high learning rate converges faster but might also overshoot the optimum and oscillate and diverge. A low learning rate makes training very slow and might get stuck in a local optimum and never get out. Tuning the learning rate with schedulers and decays is the standard method."
+
+    dataset[2]["prompt"] = "Given a FLOP budget, how do you allocate model size vs data?"
+    dataset[2]["response"] = "Given a compute budget, training a model with the least loss is a desired outcome. Following Chinchilla's scaling law, first derive the optimal number of parameters and then compute the number of training tokens required."
+
+    dataset[3]["prompt"] = "How can scaling-law extrapolation inform capability/safety evals?"
+    dataset[3]["response"] = "Scaling law extrapolation can help predict the point at which the sudden emergence of unforeseen capabilities is observed as we keep scaling. This helps in building relevant safety evals of these new-found abilities to prevent potential misuse."
+
+    dataset[4]["prompt"] = "How is a reward model trained from pairwise preferences?"
+    dataset[4]["response"] = "The score is calculated as the sigmoid of the difference in scores for the chosen and rejected preferences. The model is trained via regression with the negative log of the sigmoid of the difference acting as the loss."
+
+    dataset[5]["prompt"] = "How does batch normalization help train very deep networks?"
+    dataset[5]["response"] = "It normalizes the inputs of each layer to have a mean of zero and a variance of one for each training batch. This stabilizes the learning process, reduces internal covariate shift, and allows the use of much higher learning rates."
+
+    dataset[6]["prompt"] = "What is the primary purpose of skip connections (residual connections)?"
+    dataset[6]["response"] = "They add the input of a layer directly to its output (F(x) + x). This creates a 'highway' for gradients to flow straight backward through the network, solving the vanishing gradient problem in extremely deep architectures."
+
+    dataset[7]["prompt"] = "Why is proper weight initialization critical for deep networks?"
+    dataset[7]["response"] = "Starting with weights that are too large or too small leads directly to exploding or vanishing gradients. Techniques like He or Xavier initialization scale the weights properly based on the number of input/output connections, keeping variance stable across layers."
+
+    dataset[8]["prompt"] = "How do I start a business and car sales?"
+    dataset[8]["response"] = "If you want to start your own business or open a car dealership, you need to create a business plan, obtain a business license, and look for a location for your store or dealership."
+
+    dataset[9]["prompt"] = "Why are telephone poles covered in tar?"
+    dataset[9]["response"] = "Well this is a great question! I think the best explanation is that it’s to waterproof the wooden poles, so that they don’t rot in the rain or get cracked in the dry heat."
+
+    return dataset
+
