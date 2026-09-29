@@ -343,3 +343,14 @@ def init_lora_weights(in_features, out_features, r, seed=0):
 
     return A, B
 
+# Step 31 - freeze_base_params
+def freeze_base_params(model):
+    # TODO: set requires_grad=False on every base parameter, leaving LoRA adapters trainable.
+    for name, param in model.named_parameters():
+        if 'lora' not in name:
+            param.requires_grad = False
+        else:
+            param.requires_grad = True
+
+    return model
+
