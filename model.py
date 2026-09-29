@@ -25,3 +25,9 @@ def load_distilgpt2_model(model_name="sshleifer/tiny-gpt2"):
     model.eval()
     return model
 
+# Step 3 - set_pad_token_to_eos
+def set_pad_token_to_eos(tokenizer):
+    # TODO: assign tokenizer.pad_token = tokenizer.eos_token and return the tokenizer
+    tokenizer.pad_token = tokenizer.eos_token
+    return tokenizer
+
