@@ -359,3 +359,8 @@ def count_trainable_params(model):
     # TODO: sum p.numel() over parameters with requires_grad=True
     return sum([p.numel() for p in model.parameters() if p.requires_grad])
 
+# Step 33 - merge_lora
+def merge_lora(base_weight, lora_a, lora_b, scaling):
+    # TODO: fold the scaled low-rank update B @ A back into the base weight matrix.
+    return base_weight + scaling * (lora_b @ lora_a)
+
