@@ -222,7 +222,7 @@ def cross_entropy_loss(shift_logits, shift_labels):
     """Mean next-token cross-entropy, ignoring label positions equal to -100."""
     # TODO: reduce (B, T-1, V) logits and (B, T-1) labels to a scalar loss tensor.
     B, T, V = shift_logits.shape
-    return F.cross_entropy(shift_logits.view((B*T, V)), shift_labels.view((B*T,)), ignore_index=-100)
+    return F.cross_entropy(shift_logits.reshape((B*T, V)), shift_labels.reshape((B*T,)), ignore_index=-100)
 
 # Step 22 - adamw_update
 import torch
@@ -295,4 +295,21 @@ def sft_train_step(model, batch, optimizer):
     optimizer.step()
 
     return loss.item()
+
+# Step 27 - evaluate_loss
+import torch
+
+def evaluate_loss(model, batches):
+    """Mean LM loss over validation batches, no grad."""
+    # TODO: iterate batches under no_grad, shift logits/labels, average cross-entropy.
+    model.eval()
+    losses = []
+    with torch.no_grad():
+        for batch in batches:
+            logits = model(**batch).logits
+            slog, slab = shift_logits_and_labels(logits, batch['labels'])
+            loss = cross_entropy_loss(slog, slab)
+            losses.append(loss)
+
+    return torch.tensor(losses).mean().item()
 
