@@ -181,3 +181,17 @@ def collate_lm_batch(batch, pad_id):
 
     return out
 
+# Step 18 - iterate_minibatches
+import random
+
+
+def iterate_minibatches(examples, batch_size, seed=0):
+    # TODO: yield shuffled minibatches of size batch_size from examples (deterministic per seed).
+    rng = random.Random(seed)
+    shuffled = [ex for ex in examples]
+    rng.shuffle(shuffled)
+
+    n = len(examples)
+    for i in range(0, n, batch_size):
+        yield shuffled[i:i+batch_size]
+
