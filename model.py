@@ -135,3 +135,8 @@ def tokenize_example(tokenizer, text, max_length=64):
     # TODO: encode `text` with truncation at max_length, no padding, return list[int]
     return tokenizer.encode(text, max_length=max_length, truncation=True, padding=False)
 
+# Step 13 - build_labels
+def build_labels(input_ids):
+    # TODO: return a fresh list equal to input_ids to serve as next-token labels
+    return [x for x in input_ids]
+
