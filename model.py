@@ -62,3 +62,12 @@ def sample_with_temperature(logits, temperature):
     probs = torch.softmax(logits/temperature, dim=-1)
     return torch.multinomial(probs, num_samples=1, replacement=True).item()
 
+# Step 7 - top_k_filter
+def top_k_filter(logits, k):
+    # TODO: keep the k largest entries of logits and set the rest to -inf.
+    non_top_k = torch.argsort(-logits, dim=-1)[k:]
+    top_k_logits = logits.clone()
+    top_k_logits[non_top_k] = -torch.inf
+
+    return top_k_logits
+
