@@ -224,3 +224,30 @@ def cross_entropy_loss(shift_logits, shift_labels):
     B, T, V = shift_logits.shape
     return F.cross_entropy(shift_logits.view((B*T, V)), shift_labels.view((B*T,)), ignore_index=-100)
 
+# Step 22 - adamw_update
+import torch
+
+def adamw_update(param, grad, state, lr, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.0):
+    """Apply one in-place AdamW step to `param` using `grad` and persistent `state`."""
+    # TODO: initialize state on first call, then update moments and apply the decoupled AdamW step
+    if not state:
+        state['m'] = torch.zeros_like(param)
+        state['v'] = torch.zeros_like(param)
+        state['step'] = 0
+
+    state['step'] += 1
+
+    with torch.no_grad():
+        state['m'] *= betas[0]
+        state['m'] += grad*(1-betas[0])
+        state['v'] *= betas[1]
+        state['v'] += (grad**2)*(1-betas[1])
+
+        mt = state['m']/(1-betas[0]**state['step'])
+        vt = state['v']/(1-betas[1]**state['step'])
+
+        param -= lr * weight_decay * param
+        param -= lr * mt/(torch.sqrt(vt) + eps)
+
+    return state
+
