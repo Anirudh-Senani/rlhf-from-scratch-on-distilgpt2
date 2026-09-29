@@ -125,3 +125,8 @@ def format_example(example):
     # TODO: render {'prompt','response'} into one training string with role markers
     return f"""### Instruction:\n{example['prompt']}\n\n### Response:\n{example['response']}"""
 
+# Step 11 - apply_template
+def apply_template(examples):
+    # TODO: apply format_example to each item in examples and return the list of strings.
+    return [format_example(ex) for ex in examples]
+
