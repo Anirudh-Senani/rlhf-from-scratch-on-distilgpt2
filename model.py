@@ -156,3 +156,8 @@ def pad_batch(sequences, pad_id):
 
     return [sequences[i]+[pad_id]*(max_len-lens[i]) for i in range(len(lens))]
 
+# Step 16 - make_attention_mask
+def make_attention_mask(padded_ids, pad_id):
+    # TODO: return a same-shape 0/1 mask with 1 where token != pad_id else 0
+    return [[0 if pid==pad_id else 1 for pid in seq] for seq in padded_ids]
+
