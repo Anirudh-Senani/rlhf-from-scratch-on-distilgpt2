@@ -71,3 +71,15 @@ def top_k_filter(logits, k):
 
     return top_k_logits
 
+# Step 8 - top_p_filter
+def top_p_filter(logits, p):
+    # TODO: mask logits outside the smallest cumulative-probability nucleus of size p.
+    top_p = torch.tensor(logits).clone()
+    probs = torch.softmax(top_p, dim=-1)
+    inds = torch.argsort(-probs, dim=-1)
+
+    cutoff = ((torch.cumsum(probs[inds], dim=-1) < p).long()).sum().item()
+    top_p[inds[cutoff+1:]] = -torch.inf
+
+    return top_p
+
