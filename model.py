@@ -256,3 +256,17 @@ def linear_warmup_schedule(step, warmup_steps):
     # TODO: return a linear warmup multiplier in [0, 1] given the current step and warmup window.
     return min(step/max(warmup_steps, 1), 1.0)
 
+# Step 24 - clip_grad_norm
+def clip_grad_norm(grads, max_norm):
+    # TODO: compute the global L2 norm of grads and rescale in place if it exceeds max_norm.
+    grad_norm = torch.sqrt(sum([(grad.reshape(-1)**2).sum() for grad in grads]))
+
+    scale = 1.0
+    if grad_norm > max_norm:
+        scale = max_norm/grad_norm
+
+    for i in range(len(grads)):
+        grads[i] *= scale
+
+    return grad_norm.item()
+
