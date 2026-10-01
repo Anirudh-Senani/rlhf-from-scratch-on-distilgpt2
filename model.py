@@ -460,3 +460,11 @@ def reward_bce_loss(chosen_reward, rejected_reward):
     # TODO: BCE-style reward loss with chosen as positives and rejected as negatives.
     return (softplus(-chosen_reward) + softplus(rejected_reward)).mean()/2
 
+# Step 39 - pairwise_accuracy
+import torch
+
+def pairwise_accuracy(chosen_reward, rejected_reward):
+    """Fraction of pairs where chosen_reward > rejected_reward."""
+    # TODO: return the fraction of pairs where chosen strictly beats rejected
+    return (chosen_reward > rejected_reward).float().mean().item()
+
