@@ -448,3 +448,15 @@ def pairwise_reward_loss(chosen_reward, rejected_reward):
     # TODO: return the mean negative log-sigmoid of (chosen_reward - rejected_reward)
     return torch.log(1.0 + torch.exp(-(chosen_reward - rejected_reward))).mean()
 
+# Step 38 - reward_bce_loss
+import numpy as np
+
+
+def softplus(x):
+    return np.logaddexp(x, 0.0)
+
+
+def reward_bce_loss(chosen_reward, rejected_reward):
+    # TODO: BCE-style reward loss with chosen as positives and rejected as negatives.
+    return (softplus(-chosen_reward) + softplus(rejected_reward)).mean()/2
+
