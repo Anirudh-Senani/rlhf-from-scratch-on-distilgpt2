@@ -423,3 +423,11 @@ def build_synthetic_preference_dataset(num_examples=8, seed=0):
         dataset = dataset[:2]
     return rng.sample(dataset, num_examples)
 
+# Step 35 - format_preference
+def format_preference(example):
+    # TODO: return a dict with 'chosen_text' and 'rejected_text' built from the prompt and each answer.
+    out = {}
+    out['chosen_text'] = example['prompt'].strip() + ' ' + example['chosen'].strip()
+    out['rejected_text'] = example['prompt'].strip() + ' ' + example['rejected'].strip()
+    return out
+
