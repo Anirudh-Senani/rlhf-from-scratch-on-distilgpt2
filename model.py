@@ -364,3 +364,62 @@ def merge_lora(base_weight, lora_a, lora_b, scaling):
     # TODO: fold the scaled low-rank update B @ A back into the base weight matrix.
     return base_weight + scaling * (lora_b @ lora_a)
 
+# Step 34 - build_synthetic_preference_dataset
+def build_synthetic_preference_dataset(num_examples=8, seed=0):
+    # TODO: return a list of {'prompt','chosen','rejected'} dicts of length num_examples.
+    rng = random.Random(seed)
+
+    dataset = [{"prompt":"", "chosen":"", "rejected":""} for _ in range(12)]
+
+    dataset[0]["prompt"] = "What is 2 + 2?"
+    dataset[0]["chosen"] = "2 + 2 equals 4."
+    dataset[0]["rejected"] = "2 + 2 equals 5."
+
+    dataset[1]["prompt"] = "What is the capital of France?"
+    dataset[1]["chosen"] = "The capital of France is Paris."
+    dataset[1]['rejected'] = "I do not know."
+
+    dataset[2]["prompt"] = "How would you fix overfitting on a real model quickly?"
+    dataset[2]["chosen"] = "Early stopping, dropout, regularization, decreasing the complexity of the model (reducing layers or neurons in layers), and adding additional data with more variety."
+    dataset[2]['rejected'] = "Early stopping, dropout, regularization, decreasing the complexity of the model (reducing layers or neurons in layers), and reducing the amount of data and variety."
+
+    dataset[3]["prompt"] = "How does learning rate affect convergence/stability; how do you tune it?"
+    dataset[3]["chosen"] = "A high learning rate converges faster but might also overshoot the optimum and oscillate and diverge. A low learning rate makes training very slow and might get stuck in a local optimum and never get out. Tuning the learning rate with schedulers and decays is the standard method."
+    dataset[3]['rejected'] = "A low learning rate converges faster but might also overshoot the optimum and oscillate and diverge. A high learning rate makes training very slow and might get stuck in a local optimum and never get out. Tuning the learning rate with schedulers and decays is the standard method."
+
+    dataset[4]["prompt"] = "Given a FLOP budget, how do you allocate model size vs data?"
+    dataset[4]["chosen"] = "Given a compute budget, training a model with the least loss is a desired outcome. Following Chinchilla's scaling law, first derive the optimal number of parameters and then compute the number of training tokens required."
+    dataset[4]['rejected'] = "Given a compute budget, training a model with the least loss is a desired outcome. Following Chinchilla's scaling law, choose any number of parameters and use as many training tokens as possible."
+
+    dataset[5]["prompt"] = "How can scaling-law extrapolation inform capability/safety evals?"
+    dataset[5]["chosen"] = "Scaling law extrapolation can help predict the point at which the sudden emergence of unforeseen capabilities is observed as we keep scaling. This helps in building relevant safety evals of these new-found abilities to prevent potential misuse."
+    dataset[5]['rejected'] = "Scaling law extrapolation cannot predict the point at which the sudden emergence of unforeseen capabilities is observed as we keep scaling."
+
+    dataset[6]["prompt"] = "How is a reward model trained from pairwise preferences?"
+    dataset[6]["chosen"] = "The score is calculated as the sigmoid of the difference in scores for the chosen and rejected preferences. The model is trained via regression with the negative log of the sigmoid of the difference acting as the loss."
+    dataset[6]['rejected'] = "The score is calculated as the difference in scores for the chosen and rejected preferences. The model is trained via regression with the negative sum of the difference acting as the loss."
+
+    dataset[7]["prompt"] = "How does batch normalization help train very deep networks?"
+    dataset[7]["chosen"] = "It normalizes the inputs of each layer to have a mean of zero and a variance of one for each training batch. This stabilizes the learning process, reduces internal covariate shift, and allows the use of much higher learning rates."
+    dataset[7]['rejected'] = "It normalizes the inputs of each batch to have a mean of zero and a variance of one for each training layer. This stabilizes the learning process, reduces internal covariate shift, and allows the use of much higher learning rates."
+
+    dataset[8]["prompt"] = "What is the primary purpose of skip connections (residual connections)?"
+    dataset[8]["chosen"] = "They add the input of a layer directly to its output (F(x) + x). This creates a 'highway' for gradients to flow straight backward through the network, solving the vanishing gradient problem in extremely deep architectures."
+    dataset[8]['rejected'] = "They add the input of a layer directly to its output (F(x) + x). This creates a 'highway' for gradients to flow straight backward through the network, solving the vanishing gradient problem in every architecture."
+
+    dataset[9]["prompt"] = "Why is proper weight initialization critical for deep networks?"
+    dataset[9]["chosen"] = "Starting with weights that are too large or too small leads directly to exploding or vanishing gradients. Techniques like He or Xavier initialization scale the weights properly based on the number of input/output connections, keeping variance stable across layers."
+    dataset[9]['rejected'] = "Starting with weights that are too large or too small leads directly to exploding or vanishing gradients. Techniques like uniform or normal initialization, keeping variance stable across layers."
+
+    dataset[10]["prompt"] = "How do I start a business and car sales?"
+    dataset[10]["chosen"] = "If you want to start your own business or open a car dealership, you need to create a business plan, obtain a business license, and look for a location for your store or dealership."
+    dataset[10]['rejected'] = "If you want to start your own business or open a car dealership, you need to create a business plan, and look for a location for your store or dealership. You can deal with business license and other legal matters once the business is running."
+
+    dataset[11]["prompt"] = "Why are telephone poles covered in tar?"
+    dataset[11]["chosen"] = "Well this is a great question! I think the best explanation is that it's to waterproof the wooden poles, so that they don't rot in the rain or get cracked in the dry heat."
+    dataset[11]['rejected'] = "To stop the interference of free currents or earth's magnetic field, with the telephone signal."
+
+    if num_examples <= 2:
+        dataset = dataset[:2]
+    return rng.sample(dataset, num_examples)
+
