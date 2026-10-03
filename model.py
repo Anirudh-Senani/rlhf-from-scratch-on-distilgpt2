@@ -468,3 +468,39 @@ def pairwise_accuracy(chosen_reward, rejected_reward):
     # TODO: return the fraction of pairs where chosen strictly beats rejected
     return (chosen_reward > rejected_reward).float().mean().item()
 
+# Step 40 - reward_train_step
+import torch
+
+def reward_train_step(model, reward_head, batch, optimizer):
+    # TODO: forward chosen+rejected, score last token, compute loss/acc, step optimizer
+    chosen_inputs = {}
+    chosen_inputs['input_ids'] = batch['chosen_input_ids']
+    B, T = batch['chosen_input_ids'].shape
+    chosen_inputs['attention_mask'] = batch['chosen_attention_mask']
+    chosen_len = torch.maximum(batch['chosen_attention_mask'].sum(dim=-1, keepdim=True).long() - 1, torch.tensor(0))
+    chosen_hidden = model(**chosen_inputs)
+    chosen_hidden_last = chosen_hidden[torch.arange(B)[:, None], chosen_len, :]
+
+    rejected_inputs = {}
+    rejected_inputs['input_ids'] = batch['rejected_input_ids']
+    B, T = batch['rejected_input_ids'].shape
+    rejected_inputs['attention_mask'] = batch['rejected_attention_mask']
+    rejected_len = torch.maximum(batch['rejected_attention_mask'].sum(dim=-1, keepdim=True).long() - 1, torch.tensor(0))
+    rejected_hidden = model(**rejected_inputs)
+    rejected_hidden_last = rejected_hidden[torch.arange(B)[:, None], rejected_len, :]
+
+    chosen_reward = reward_head_forward(chosen_hidden_last, reward_head.weight, reward_head.bias)
+    rejected_reward = reward_head_forward(rejected_hidden_last, reward_head.weight, reward_head.bias)
+
+    loss = pairwise_reward_loss(chosen_reward, rejected_reward)
+    accuracy = pairwise_accuracy(chosen_reward, rejected_reward)
+
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    return dict(
+        loss=loss.item(),
+        accuracy=accuracy
+    )
+
