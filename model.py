@@ -526,3 +526,17 @@ def per_token_kl(policy_logprobs, ref_logprobs):
     # TODO: return the per-token KL contribution used in the PPO penalty
     return (policy_logprobs - ref_logprobs)
 
+# Step 43 - compute_returns
+import numpy as np
+
+def compute_returns(rewards, gamma=0.99):
+    """Return the discounted return at each timestep as a 1D numpy array."""
+    # TODO: turn a per-timestep reward sequence into discounted returns
+    t = len(rewards)
+    returns = [rewards[-1]]
+
+    for i in range(t-2, -1, -1):
+        returns.append(rewards[i] + returns[-1]*gamma)
+
+    return np.asarray(list(reversed(returns)))
+
