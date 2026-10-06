@@ -66,6 +66,7 @@ python scaffold.py
 - [x] **54.** dpo_loss
 - [x] **55.** ipo_loss
 - [x] **56.** kto_loss
+- [x] **57.** orpo_loss
 
 ---
 

@@ -670,3 +670,10 @@ def kto_loss(policy_logps, ref_logps, labels, beta=0.1):
 
     return (1 - torch.sigmoid(r)).mean()
 
+# Step 57 - orpo_loss
+def orpo_loss(policy_chosen_logps, policy_rejected_logps, sft_loss, lambda_or=0.1):
+    # TODO: return sft_loss + lambda_or * mean(-log_sigmoid(log_odds_chosen - log_odds_rejected))
+    policy_chosen_logodds = policy_chosen_logps - torch.log1p(-torch.exp(policy_chosen_logps))
+    policy_rejected_logodds = policy_rejected_logps - torch.log1p(-torch.exp(policy_rejected_logps))
+    return sft_loss + lambda_or * (-F.logsigmoid(policy_chosen_logodds - policy_rejected_logodds)).mean()
+
