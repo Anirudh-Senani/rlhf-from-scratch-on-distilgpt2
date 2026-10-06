@@ -72,6 +72,7 @@ python scaffold.py
 - [x] **60.** generate_completions
 - [x] **61.** score_with_reward
 - [x] **62.** win_rate
+- [x] **63.** stream_tokens
 
 ---
 

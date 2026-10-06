@@ -737,3 +737,20 @@ def win_rate(reward_model, tokenizer, prompts, completions_a, completions_b):
 
     return ((a_rewards > b_rewards).mean() + (a_rewards == b_rewards).mean()/2).item()
 
+# Step 63 - stream_tokens
+def stream_tokens(model, tokenizer, prompt, max_new_tokens):
+    # TODO: yield one decoded text piece per greedy-decoded new token, up to max_new_tokens.
+    prompt_ids = tokenizer.encode([prompt], return_tensors="pt")
+    decoded_text = tokenizer.decode(prompt_ids)[0]
+
+    with torch.no_grad():
+        for _ in range(max_new_tokens):
+            token = torch.argmax(model.generate(prompt_ids), dim=-1, keepdim=True)
+            prompt_ids = torch.cat([prompt_ids, token], dim=-1)
+            new_decoded_text = tokenizer.decode(prompt_ids)[0]
+            new_text = new_decoded_text.replace(decoded_text, "")
+
+            decoded_text = new_decoded_text
+
+            yield new_text
+
