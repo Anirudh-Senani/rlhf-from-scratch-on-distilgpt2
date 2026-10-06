@@ -723,3 +723,17 @@ def score_with_reward(reward_model, tokenizer, prompt, completion):
 
     return reward.item()
 
+# Step 62 - win_rate
+def win_rate(reward_model, tokenizer, prompts, completions_a, completions_b):
+    """Fraction of prompts where A's completion outscores B's under the reward model.
+
+    Ties count as 0.5. Returns a float in [0, 1].
+    """
+    a_rewards = [score_with_reward(reward_model, tokenizer, p, c) for p, c in zip(prompts, completions_a)]
+    b_rewards = [score_with_reward(reward_model, tokenizer, p, c) for p, c in zip(prompts, completions_b)]
+
+    a_rewards = np.asarray(a_rewards)
+    b_rewards = np.asarray(b_rewards)
+
+    return (a_rewards > b_rewards).mean() + (a_rewards == b_rewards).mean()/2
+
