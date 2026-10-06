@@ -600,3 +600,11 @@ def ppo_loss(ratio, advantages, values, returns, logits, clip_eps=0.2, vf_coef=0
 
     return loss
 
+# Step 50 - kl_penalized_reward
+import torch
+
+def kl_penalized_reward(reward, kl, beta=0.1):
+    """Return reward shaped by a KL penalty against a reference policy."""
+    # TODO: combine the reward model score with a beta-weighted KL penalty
+    return reward - beta * kl
+
