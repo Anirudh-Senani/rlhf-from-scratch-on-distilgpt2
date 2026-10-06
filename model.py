@@ -586,3 +586,17 @@ def entropy_bonus(logits):
     logprobs = F.log_softmax(logits, dim=-1)
     return (-(torch.exp(logprobs) * logprobs).sum(dim=-1)).mean()
 
+# Step 49 - ppo_loss
+import torch
+
+def ppo_loss(ratio, advantages, values, returns, logits, clip_eps=0.2, vf_coef=0.5, ent_coef=0.01):
+    # TODO: combine clipped surrogate, value loss, and entropy bonus into the full PPO loss dict.
+    loss = {}
+    loss['entropy'] = entropy_bonus(logits)
+    loss['policy_loss'] = clipped_surrogate(ratio, advantages, clip_eps)
+    loss['value_loss'] = value_function_loss(values, returns)
+
+    loss['loss'] = loss['policy_loss'] + vf_coef * loss['value_loss'] - ent_coef * loss['entropy']
+
+    return loss
+
