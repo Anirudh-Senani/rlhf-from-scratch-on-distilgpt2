@@ -560,3 +560,11 @@ def policy_ratio(new_logprobs, old_logprobs):
     # TODO: exponentiate the difference between new and old log probabilities
     return torch.exp(new_logprobs - old_logprobs)
 
+# Step 46 - clipped_surrogate
+import torch
+
+def clipped_surrogate(ratio, advantages, clip_eps=0.2):
+    """PPO clipped surrogate loss (scalar tensor to minimize)."""
+    # TODO: combine ratio and advantages via the PPO clipped objective and return a scalar loss
+    return -(torch.minimum(ratio * advantages, torch.clip(ratio, 1-clip_eps, 1+clip_eps) * advantages)).mean()
+
