@@ -63,6 +63,7 @@ python scaffold.py
 - [x] **51.** batch_sequence_logprob
 - [x] **52.** dpo_logratios
 - [x] **53.** dpo_ref_logratios
+- [x] **54.** dpo_loss
 
 ---
 
