@@ -777,3 +777,25 @@ def apply_stop_tokens(text, stop_tokens, eos_token):
     trunc_i = min(es_min, st_min, n)
     return text[:trunc_i]
 
+# Step 65 - chat
+def chat(model, tokenizer, user_message, system_prompt=None, max_new_tokens=32, stop_tokens=None):
+    # TODO: build a chat-style prompt, generate a reply, and trim it at stop tokens / EOS.
+    tokenizer = set_pad_token_to_eos(tokenizer)
+
+    if stop_tokens is None:
+        stop_tokens = ["\nUser:"]
+    elif "\nUser:" not in stop_tokens:
+        stop_tokens.append("\nUser:")
+
+    prompt = ""
+    if system_prompt is not None:
+        prompt += f"System: {system_prompt}\n"
+
+    prompt += f"User: {user_message}\n"
+    prompt += "Assistant: "
+
+    n = len(prompt)
+
+    generated = generate_and_decode(model, tokenizer, prompt, max_new_tokens)[n:]
+    return apply_stop_tokens(generated, stop_tokens, tokenizer.eos_token).strip()
+
