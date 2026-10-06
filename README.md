@@ -61,6 +61,7 @@ python scaffold.py
 - [x] **49.** ppo_loss
 - [x] **50.** kl_penalized_reward
 - [x] **51.** batch_sequence_logprob
+- [x] **52.** dpo_logratios
 
 ---
 
