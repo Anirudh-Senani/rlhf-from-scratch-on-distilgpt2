@@ -608,3 +608,16 @@ def kl_penalized_reward(reward, kl, beta=0.1):
     # TODO: combine the reward model score with a beta-weighted KL penalty
     return reward - beta * kl
 
+# Step 51 - batch_sequence_logprob
+import torch
+import torch.nn.functional as F
+
+def batch_sequence_logprob(logits, token_ids, attention_mask=None):
+    # TODO: return a (B,) tensor of summed token log probabilities, respecting attention_mask.
+    B, T, _ = logits.shape
+    logprobs = F.log_softmax(logits, dim=-1)[torch.arange(B)[:,None], torch.arange(T)[None,:], token_ids]
+    if attention_mask is not None:
+        logprobs = logprobs * attention_mask
+
+    return logprobs.sum(dim=-1)
+
