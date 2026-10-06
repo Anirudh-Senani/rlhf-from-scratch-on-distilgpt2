@@ -702,7 +702,8 @@ def generate_completions(model, tokenizer, prompts, max_new_tokens=16):
     # TODO: produce one decoded completion per prompt, preserving input order
     if not prompts:
         return prompts
-    prompt_ids = tokenizer.encode(prompts, return_tensors='pt')
+
+    prompt_ids = tokenizer.encode(prompts, return_tensors='pt', padding=True)
 
     for _ in range(max_new_tokens):
         token = torch.argmax(model.generate(prompt_ids), dim=-1, keepdim=True)
