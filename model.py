@@ -660,3 +660,13 @@ def ipo_loss(policy_chosen_logps, policy_rejected_logps, ref_chosen_logps, ref_r
     h = dpo_logratios(policy_chosen_logps, policy_rejected_logps) - dpo_ref_logratios(ref_chosen_logps, ref_rejected_logps)
     return ((h - 1/(2*beta))**2).mean()
 
+# Step 56 - kto_loss
+import torch
+
+def kto_loss(policy_logps, ref_logps, labels, beta=0.1):
+    # TODO: implement KTO loss for unpaired desirable/undesirable examples.
+    r = beta * (policy_logps - ref_logps)
+    r = torch.where(labels==0.0, -r, r)
+
+    return (1 - torch.sigmoid(r)).mean()
+
