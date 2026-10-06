@@ -644,5 +644,11 @@ def dpo_loss(policy_chosen_logps, policy_rejected_logps, ref_chosen_logps, ref_r
     """Return the DPO loss as a scalar torch tensor."""
     # TODO: combine policy and reference log-ratios into the DPO log-sigmoid loss
     diff = beta * (dpo_logratios(policy_chosen_logps, policy_rejected_logps) - dpo_ref_logratios(ref_chosen_logps, ref_rejected_logps))
-    return (-F.logsigmoid(diff)).mean()
+    x = torch.exp(-torch.abs(diff))
+    y = 1.0 + x
+    z = y - 1.0
+    logsig_diff = torch.minimum(diff, torch.tensor(0.0)) - (torch.where(z==0.0, x, x*torch.log(y)/z))
+
+    # return (-F.logsigmoid(diff)).mean()
+    return (-logsig_diff).mean()
 
