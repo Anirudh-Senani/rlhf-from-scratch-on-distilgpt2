@@ -64,6 +64,7 @@ python scaffold.py
 - [x] **52.** dpo_logratios
 - [x] **53.** dpo_ref_logratios
 - [x] **54.** dpo_loss
+- [x] **55.** ipo_loss
 
 ---
 

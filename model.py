@@ -652,3 +652,11 @@ def dpo_loss(policy_chosen_logps, policy_rejected_logps, ref_chosen_logps, ref_r
     # return (-F.logsigmoid(diff)).mean()
     return (-logsig_diff).mean()
 
+# Step 55 - ipo_loss
+import torch
+
+def ipo_loss(policy_chosen_logps, policy_rejected_logps, ref_chosen_logps, ref_rejected_logps, beta=0.1):
+    # TODO: regress (policy_logratios - ref_logratios) toward the IPO target 1/(2*beta)
+    h = dpo_logratios(policy_chosen_logps, policy_rejected_logps) - dpo_ref_logratios(ref_chosen_logps, ref_rejected_logps)
+    return ((h - 1/(2*beta))**2).mean()
+
