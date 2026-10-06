@@ -62,6 +62,7 @@ python scaffold.py
 - [x] **50.** kl_penalized_reward
 - [x] **51.** batch_sequence_logprob
 - [x] **52.** dpo_logratios
+- [x] **53.** dpo_ref_logratios
 
 ---
 
