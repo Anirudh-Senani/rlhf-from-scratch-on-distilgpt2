@@ -568,3 +568,11 @@ def clipped_surrogate(ratio, advantages, clip_eps=0.2):
     # TODO: combine ratio and advantages via the PPO clipped objective and return a scalar loss
     return -(torch.minimum(ratio * advantages, torch.clip(ratio, 1-clip_eps, 1+clip_eps) * advantages)).mean()
 
+# Step 47 - value_function_loss
+import torch
+
+def value_function_loss(values, returns):
+    """Mean squared error between predicted values and target returns."""
+    # TODO: compute mean((values - returns) ** 2) as a scalar tensor
+    return ((values - returns)**2).mean()
+
