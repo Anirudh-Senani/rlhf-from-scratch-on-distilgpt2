@@ -540,3 +540,15 @@ def compute_returns(rewards, gamma=0.99):
 
     return np.asarray(list(reversed(returns)))
 
+# Step 44 - gae_advantages
+def gae_advantages(rewards, values, gamma=0.99, lam=0.95):
+    # TODO: compute GAE advantages of shape (T,) from rewards (T,) and values (T+1,)
+    t = rewards.shape[0]
+    adv = torch.zeros((t+1,))
+
+    for i in reversed(range(t)):
+        td = rewards[i] + gamma*values[i+1] - values[i]
+        adv[i] = td + gamma * lam * adv[i+1]
+
+    return adv[:-1]
+
