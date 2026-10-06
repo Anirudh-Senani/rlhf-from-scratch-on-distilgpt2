@@ -754,3 +754,26 @@ def stream_tokens(model, tokenizer, prompt, max_new_tokens):
 
             yield new_text
 
+# Step 64 - apply_stop_tokens
+def apply_stop_tokens(text, stop_tokens, eos_token):
+    # TODO: truncate text at the earliest occurrence of any stop token or the eos token
+    n = len(text)
+    st_min = n
+
+    if stop_tokens is None:
+        stop_tokens = []
+
+    for st in stop_tokens:
+        st_ind = text.find(st)
+        if st_ind != -1:
+            st_min = min(st_min, st_ind)
+
+    es_min = n
+    if eos_token is not None:
+        es_ind = text.find(eos_token)
+        if es_ind != -1:
+            es_min = min(es_min, es_ind)
+
+    trunc_i = min(es_min, st_min, n)
+    return text[:trunc_i]
+
