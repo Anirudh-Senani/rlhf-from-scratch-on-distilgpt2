@@ -735,5 +735,5 @@ def win_rate(reward_model, tokenizer, prompts, completions_a, completions_b):
     a_rewards = np.asarray(a_rewards)
     b_rewards = np.asarray(b_rewards)
 
-    return (a_rewards > b_rewards).mean() + (a_rewards == b_rewards).mean()/2
+    return ((a_rewards > b_rewards).mean() + (a_rewards == b_rewards).mean()/2).item()
 
