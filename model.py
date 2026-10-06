@@ -718,7 +718,7 @@ def score_with_reward(reward_model, tokenizer, prompt, completion):
     text_ids = tokenizer([text], return_tensors="pt")
 
     with torch.no_grad():
-        hidden_state = reward_model['model'](**text_ids, output_hidden_states=True).last_hidden_state
+        hidden_state = reward_model['model'](**text_ids, output_hidden_states=True).hidden_states[-1]
     reward = reward_head_forward(hidden_state[:,-1,:], reward_model['weight'], reward_model['bias'])[0]
 
     return reward.item()
