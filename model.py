@@ -710,3 +710,16 @@ def generate_completions(model, tokenizer, prompts, max_new_tokens=16):
 
     return tokenizer.decode(prompt_ids)
 
+# Step 61 - score_with_reward
+def score_with_reward(reward_model, tokenizer, prompt, completion):
+    """Return a scalar reward float for the prompt+completion pair."""
+    # TODO: tokenize prompt+completion, run the backbone, apply the reward head.
+    text = prompt + "\n" + completion
+    text_ids = tokenizer([text], return_tensors="pt")
+
+    with torch.no_grad():
+        hidden_state = reward_model['model'](**text_ids, output_hidden_states=True).last_hidden_state
+    reward = reward_head_forward(hidden_state[:,-1,:], reward_model['weight'], reward_model['bias'])[0]
+
+    return reward.item()
+
