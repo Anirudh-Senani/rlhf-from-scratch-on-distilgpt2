@@ -689,3 +689,10 @@ def simpo_loss(policy_chosen_logps, policy_rejected_logps, chosen_lengths, rejec
 
     return (-F.logsigmoid(beta * (rc - rr) - gamma)).mean()
 
+# Step 59 - build_eval_prompt_set
+def build_eval_prompt_set():
+    # TODO: return a held-out list of at least 4 short instruction-style eval prompts
+    prompts = ["What is 5+5?", "What is the capital of Italy?", "When is the dropout layer used?", "Why can't we initialize all weights and biases as zeros and ones?"]
+
+    return prompts
+
