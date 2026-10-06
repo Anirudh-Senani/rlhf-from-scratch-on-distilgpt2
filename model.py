@@ -696,3 +696,17 @@ def build_eval_prompt_set():
 
     return prompts
 
+# Step 60 - generate_completions
+def generate_completions(model, tokenizer, prompts, max_new_tokens=16):
+    """Return a list of greedy completions, one per prompt."""
+    # TODO: produce one decoded completion per prompt, preserving input order
+    if not prompts:
+        return prompts
+    prompt_ids = tokenizer.encode(prompts, return_tensors='pt')
+
+    for _ in range(max_new_tokens):
+        token = torch.argmax(model.generate(prompt_ids), dim=-1, keepdim=True)
+        prompt_ids = torch.cat([prompt_ids, token], dim=-1)
+
+    return tokenizer.decode(prompt_ids)
+
